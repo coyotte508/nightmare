@@ -530,9 +530,13 @@ If you need to do something custom when you first load the window environment, y
 can specify a custom preload script. Here's how you do that:
 
 ```js
+const path = require("path");
+
 var nightmare = Nightmare({
   webPreferences: {
-    preload: custom-script.js
+    /* path.resolve is used to give a local file as a preload script */
+    preload: path.resolve("custom-script.js")
+    //preload: "/absolute/path/to/custom-script.js"
   }
 })
 ```
@@ -541,8 +545,10 @@ The only requirement for that script is that you'll need the following prelude:
 
 ```js
 window.__nightmare = {};
-__nightmare.ipc = require('ipc');
+__nightmare.ipc = require('electron').ipcRenderer;
 ```
+
+To be able to enjoy the forwarding of console messages and errors, you can instead copy the whole of nightmare's default [preload script](lib/preload.js).
 
 ## Usage
 #### Installation
